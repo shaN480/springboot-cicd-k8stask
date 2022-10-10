@@ -24,11 +24,11 @@ pipeline {
                     def scannerHome = tool 'sonarqube-scanner';
                     withSonarQubeEnv(credentialsId: 'sonarqube_access_token'){
                         sh "${tool("sonarqube-scanner")}/bin/sonar-scanner \
-                        -Dsonar.projectKey=mavenproject \
+                        -Dsonar.projectKey=testmaven \
                         -Dsonar.sources=. \
                         -Dsonar.css.node=. \
                         -Dsonar.host.url=http://18.118.105.76:9000 \
-                        -Dsonar.login=sqp_2e16cf3ab048b750b52a6c5a053d752f67324dca"
+                        -Dsonar.login=sqp_f9a3cec027e48f6e01115d895b9aa5c34351b718"
                         
                     }
                 }
