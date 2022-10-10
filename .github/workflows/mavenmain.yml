@@ -12,7 +12,7 @@ jobs:
         uses: Abhilash-1201/springboot-cicd-k8stask@main
         with:
           jenkins-server:  "${{ secrets.JENKINS_SERVER }}" # URL of the jenkins server
-          jenkins-job: "samplejobforjenkins" # The name of the jenkins job to run
+          jenkins-job: "testmaven" # The name of the jenkins job to run
           jenkins-username: ${{ secrets.JENKINS_USERNAME }} # user name for accessing jenkins
           jenkins-pat: ${{ secrets.JENKINS_PAT }} # personal Access token for accessing Jenkins
           poll-time: 10 # how often to poll the jenkins server for results
