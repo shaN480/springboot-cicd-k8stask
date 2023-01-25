@@ -11,6 +11,12 @@ pipeline{
             steps{
                 //check out code from the GitHub
                 git branch: 'main', url: 'https://github.com/Abhilash-1201/springboot-cicd-k8stask.git'
+                script {
+                    def props = readProperties file: 'sonar-project.properties'
+                    env.SONAR_HOST_URL = props['sonar.host.url']
+                    env.SONAR_PROJECT_KEY = props['sonar.projectKey']
+                    env.SONAR_PROJECT_NAME = props['sonar.projectName']
+                }
             }
         }
         //This stage gets all code Quality check from the GitHub Repository
@@ -22,16 +28,7 @@ pipeline{
                 
             }
         }
-       stage('Read Properties File') {
-            steps {
-                configFileProvider([configFile(fileId: 'springboot-cicd-k8stask/sonar-project.properties', variable: 'SONAR_PROPERTIES')]) {
-                    sh """
-                    SONAR_HOST_URL=\$(grep -oP "(?<=sonar.host.url=)[^\\s]+" ${SONAR_PROPERTIES})
-                    echo "SONAR_HOST_URL: ${SONAR_HOST_URL}"
-                    """
-                }
-            }
-        }
+ 
         
         stage('Slack Notification') {
             steps {
@@ -40,7 +37,7 @@ pipeline{
                     
                     
                   if (qg == 'ERROR') {
-                    slackSend color: '#FF0000', message: 'SonarQube Analysis failed. View the report at\n\nSonarQube Analysis Report : http://${SONAR_HOST_URL}:9000/dashboard?id=${SONAR_PROJECT_KEY}\n\nGuest Username: guest01\n\nGuest Password: guest01'
+                    slackSend color: '#FF0000', message: 'SonarQube Analysis failed. View the report at\n\nSonarQube Analysis Report : http://$SONAR_HOST_URL:9000/dashboard?id=$SONAR_PROJECT_KEY\n\nGuest Username: guest01\n\nGuest Password: guest01'
                 }
                 else if (qg == 'OK') {
                      mail to: "abhilash.rl@cloudjournee.com",
