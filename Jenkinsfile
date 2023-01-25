@@ -9,6 +9,12 @@ pipeline{
     stages{
         stage('code checkout from GitHub'){
             steps{
+                node {
+                    def sonarProperties = readProperties file: 'sonar-project.properties'
+                    def SONAR_HOST_URL = sonarProperties.getProperty('sonar.host.url')
+                    def SONAR_PROJECT_KEY = sonarProperties.getProperty('sonar.projectKey')
+                    echo "SONAR_HOST_URL: ${SONAR_HOST_URL} , SONAR_PROJECT_KEY: ${SONAR_PROJECT_KEY}"
+                    }
                 //check out code from the GitHub
                 git branch: 'main', url: 'https://github.com/Abhilash-1201/springboot-cicd-k8stask.git'
             }
@@ -29,7 +35,7 @@ pipeline{
             steps {
                 script {
                     def qg = sh(returnStdout: true, script: 'curl -s -u admin:abhi "http://18.188.146.124:9000/api/qualitygates/project_status?projectKey=maven" | jq -r .projectStatus.status').trim()
-                    def SONAR_HOST_URL = sh (script: "awk -F '=' '/sonar.host.url/ {print \$2}' sonar-project.properties", returnStdout: true).trim()
+                    //def SONAR_HOST_URL = sh (script: "awk -F '=' '/sonar.host.url/ {print \$2}' sonar-project.properties", returnStdout: true).trim()
                     //def props = readFile 'sonar-project.properties'
                     //def SONAR_HOST_URL = props.get('sonar.host.url')
                     //def SONAR_PROJECT_KEY = props.get('sonar.projectKey')
