@@ -26,13 +26,12 @@ pipeline{
             steps {
                 configFileProvider([configFile(fileId: 'sonar-properties', variable: 'SONAR_PROPERTIES')]) {
                     sh """
-                    SONAR_HOST_URL=$(grep -oP "(?<=sonar.host.url=)[^\\s]+" ${SONAR_PROPERTIES})
+                    SONAR_HOST_URL=\$(grep -oP "(?<=sonar.host.url=)[^\\s]+" ${SONAR_PROPERTIES})
                     echo "SONAR_HOST_URL: ${SONAR_HOST_URL}"
                     """
                 }
             }
         }
-            
         
         stage('Slack Notification') {
             steps {
