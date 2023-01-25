@@ -22,16 +22,16 @@ pipeline{
                 
             }
         }
-       stage('Read SonarProperties'){
-           steps{
-           node {
-               def sonarProperties = readProperties file: 'sonar-project.properties'
-               env.SONAR_HOST_URL = sonarProperties.getProperty('sonar.host.url')
-               env.SONAR_PROJECT_KEY = sonarProperties.getProperty('sonar.projectKey')
-               echo "SONAR_HOST_URL: ${env.SONAR_HOST_URL} , SONAR_PROJECT_KEY: ${env.SONAR_PROJECT_KEY}"
-               }
-           }
-       }
+       stage('Read Properties File') {
+            steps {
+                configFileProvider([configFile(fileId: 'sonar-properties', variable: 'SONAR_PROPERTIES')]) {
+                    sh '''
+                    SONAR_HOST_URL=$(grep -oP "(?<=sonar.host.url=)[^\s]+" ${SONAR_PROPERTIES})
+                    echo "SONAR_HOST_URL: ${SONAR_HOST_URL}"
+                    '''
+                }
+            }
+        }
             
         
         stage('Slack Notification') {
