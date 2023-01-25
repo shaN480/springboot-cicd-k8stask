@@ -16,7 +16,7 @@ pipeline{
                //     env.SONAR_HOST_URL = props['sonar.host.url']
                //     env.SONAR_PROJECT_KEY = props['sonar.projectKey']
                //     env.SONAR_PROJECT_NAME = props['sonar.projectName']
-              //  }
+               // }
             }
         }
         //This stage gets all code Quality check from the GitHub Repository
@@ -35,10 +35,6 @@ pipeline{
                 script {
                     
                     def qg = sh(returnStdout: true, script: 'curl -s -u admin:abhi "http://18.188.146.124:9000/api/qualitygates/project_status?projectKey=maven" | jq -r .projectStatus.status').trim()
-                    def props = readProperties file: 'sonar-project.properties'
-                    env.SONAR_HOST_URL = props['sonar.host.url']
-                    env.SONAR_PROJECT_KEY = props['sonar.projectKey']
-                    env.SONAR_PROJECT_NAME = props['sonar.projectName']
                     
                   if (qg == 'ERROR') {
                     slackSend color: '#FF0000', message: 'SonarQube Analysis failed. View the report at\n\nSonarQube Analysis Report : http://$SONAR_HOST_URL:9000/dashboard?id=$SONAR_PROJECT_KEY\n\nGuest Username: guest01\n\nGuest Password: guest01'
