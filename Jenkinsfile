@@ -23,13 +23,14 @@ pipeline{
             }
         }
        stage('Read SonarProperties'){
-           
+           steps{
            node {
                def sonarProperties = readProperties file: 'sonar-project.properties'
                env.SONAR_HOST_URL = sonarProperties.getProperty('sonar.host.url')
                env.SONAR_PROJECT_KEY = sonarProperties.getProperty('sonar.projectKey')
                echo "SONAR_HOST_URL: ${env.SONAR_HOST_URL} , SONAR_PROJECT_KEY: ${env.SONAR_PROJECT_KEY}"
                }
+           }
        }
             
         
