@@ -29,7 +29,7 @@ pipeline{
             steps {
                 script {
                     def qg = sh(returnStdout: true, script: 'curl -s -u admin:abhi "http://18.188.146.124:9000/api/qualitygates/project_status?projectKey=maven" | jq -r .projectStatus.status').trim()
-                    def SONAR_HOST_URL = sh (script: "awk -F '=' '/sonar.host.url/ {print $2}' sonar-project.properties", returnStdout: true).trim()
+                    def SONAR_HOST_URL = sh (script: "awk -F '=' '/sonar.host.url/ {print \$2}' sonar-project.properties", returnStdout: true).trim()
                     //def props = readFile 'sonar-project.properties'
                     //def SONAR_HOST_URL = props.get('sonar.host.url')
                     //def SONAR_PROJECT_KEY = props.get('sonar.projectKey')
