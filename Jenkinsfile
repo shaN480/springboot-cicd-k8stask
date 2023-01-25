@@ -5,6 +5,12 @@ pipeline{
                   
                 //}
     //tools {maven "MAVEN"}
+    node {
+    def sonarProperties = readProperties file: 'sonar-project.properties'
+    def SONAR_HOST_URL = sonarProperties.getProperty('sonar.host.url')
+    def SONAR_PROJECT_KEY = sonarProperties.getProperty('sonar.projectKey')
+    echo "SONAR_HOST_URL: ${SONAR_HOST_URL} , SONAR_PROJECT_KEY: ${SONAR_PROJECT_KEY}"
+}
     stages{
         stage('code checkout from GitHub'){
             steps{
@@ -21,11 +27,8 @@ pipeline{
                 
             }
         }
-        node {
-            def sonarProperties = readProperties file: 'sonar-project.properties'
-            def SONAR_HOST_URL = sonarProperties.getProperty('sonar.host.url')
-            def SONAR_PROJECT_KEY = sonarProperties.getProperty('sonar.projectKey')
-        }
+       
+            
         
         stage('Slack Notification') {
             steps {
