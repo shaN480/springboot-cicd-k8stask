@@ -24,7 +24,7 @@ pipeline{
         }
        stage('Read Properties File') {
             steps {
-                configFileProvider([configFile(fileId: 'sonar-project.properties', variable: 'SONAR_PROPERTIES')]) {
+                configFileProvider([configFile(fileId: './sonar-project.properties', variable: 'SONAR_PROPERTIES')]) {
                     sh """
                     SONAR_HOST_URL=\$(grep -oP "(?<=sonar.host.url=)[^\\s]+" ${SONAR_PROPERTIES})
                     echo "SONAR_HOST_URL: ${SONAR_HOST_URL}"
