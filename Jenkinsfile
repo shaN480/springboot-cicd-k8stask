@@ -26,15 +26,19 @@ pipeline{
             steps {
                 script {
                     def qg = sh(returnStdout: true, script: 'curl -s -u admin:abhi "http://18.188.146.124:9000/api/qualitygates/project_status?projectKey=maven" | jq -r .projectStatus.status').trim()
+                    def props = readFile 'sonar-project.properties'
+                    def SONAR_HOST_URL = props.get('sonar.host.url')
+                    def SONAR_PROJECT_KEY = props.get('sonar.projectKey')
+                    
                     
                   if (qg == 'ERROR') {
-                    slackSend color: '#FF0000', message: 'SonarQube Analysis failed. View the report at\n\nSonarQube Analysis Report : http://18.188.146.124:9000/dashboard?id=maven\n\nGuest Username: guest01\n\nGuest Password: guest01'
+                    slackSend color: '#FF0000', message: 'SonarQube Analysis failed. View the report at\n\nSonarQube Analysis Report : http://${SONAR_HOST_URL}:9000/dashboard?id=${SONAR_PROJECT_KEY}\n\nGuest Username: guest01\n\nGuest Password: guest01'
                 }
                 else if (qg == 'OK') {
                      mail to: "abhilash.rl@cloudjournee.com",
                           //cc: "deeptanshu.s@cloudjournee.com",
                          subject: "SonarQube Guest Login Credentials",
-                         body: "Hi Team,\n\n\nPlease find the SonarQube Analysis Report with credentials below\n\n\nSonarQube Analysis Report : http://18.188.146.124:9000/dashboard?id=maven\n\nGuest Username: guest01\n\nGuest Password: guest01"
+                         body: "Hi Team,\n\n\nPlease find the SonarQube Analysis Report with credentials below\n\n\nSonarQube Analysis Report : http://${SONAR_HOST_URL}:9000/dashboard?id=${SONAR_PROJECT_KEY}\n\nGuest Username: guest01\n\nGuest Password: guest01"
                   }
                 }
             }
