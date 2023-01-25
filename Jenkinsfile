@@ -1,11 +1,8 @@
 pipeline{
     agent any
-    environment {
-        result = sh(script: "echo $currentBuild.result", returnStdout: true)
-    }
     //environment { //registry1 = "519852036875.dkr.ecr.us-east-2.amazonaws.com/demo_project:${env.BUILD_NUMBER}"
                   //registry2 = "519852036875.dkr.ecr.us-east-2.amazonaws.com/cloudjournee:${env.BUILD_NUMBER}"
-                  //result = currentBuild.result
+                  
                 //}
     //tools {maven "MAVEN"}
     stages{
@@ -20,8 +17,6 @@ pipeline{
             steps{
                 script{
                     sh "/opt/sonar-scanner/bin/sonar-scanner"
-                    //def qg = sh(returnStdout: true, script: 'curl -s -u admin:abhi "http://18.188.146.124:9000/api/qualitygates/project_status?projectKey=maven" | jq -r .projectStatus.status').trim()
-                    
                 }
                 
             }
@@ -32,27 +27,15 @@ pipeline{
                 script {
                     def qg = sh(returnStdout: true, script: 'curl -s -u admin:abhi "http://18.188.146.124:9000/api/qualitygates/project_status?projectKey=maven" | jq -r .projectStatus.status').trim()
                     
-                //if (result == 'FAILURE') {
-                //    slackSend color: '#FF0000', message: 'SonarQube analysis failed. View the report at http://18.188.146.124:9000/dashboard?id=maven'
-               // }
                   if (qg == 'ERROR') {
-                    slackSend color: '#FF0000', message: 'SonarQube analysis failed. View the report at http://18.188.146.124:9000/dashboard?id=maven'
+                    slackSend color: '#FF0000', message: 'SonarQube analysis failed. View the report at\n\n\http://18.188.146.124:9000/dashboard?id=maven'
                 }
                 else if (qg == 'OK') {
                      mail to: "abhilash.rl@cloudjournee.com",
                           //cc: "deeptanshu.s@cloudjournee.com",
                          subject: "SonarQube Guest Login Credentials",
                          body: "Hi Team,\n\n\nPlease find the SonarQube Analysis Report with credentials below\n\n\nSonarQube Analysis Report : http://18.188.146.124:9000/dashboard?id=maven"
-                }
-                //slackSend color: '#00FF00', message: 'SonarQube analysis complete. View the report at http://18.188.146.124:9000/dashboard?id=maven'
-               // script {
-                    //if (currentBuild.result == "FAILURE") {
-                    //    slackSend color: 'danger', message: "SonarQube Analysis Failed: ${env.BUILD_URL}"
-                    //} else {
-                       // slackSend color: 'good', message: "SonarQube Analysis Passed: ${env.BUILD_URL}"
-                    //}
-                    
-              //  }
+                  }
                 }
             }
         }    
