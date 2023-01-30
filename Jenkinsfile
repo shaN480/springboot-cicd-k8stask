@@ -10,7 +10,7 @@ pipeline{
         stage('code checkout from GitHub'){
             steps{
                 //check out code from the GitHub
-                git branch: 'main', credentialsId: 'git', url: 'https://github.com/Abhilash-1201/springboot-cicd-k8stask.git'
+                git branch: 'main', url: 'https://github.com/Abhilash-1201/springboot-cicd-k8stask.git'
                 //script {
                //     def props = readProperties file: 'sonar-project.properties'
                //     env.SONAR_HOST_URL = props['sonar.host.url']
