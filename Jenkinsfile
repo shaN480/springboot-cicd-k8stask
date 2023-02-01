@@ -38,11 +38,11 @@ pipeline{
                        slackSend color: '#FF0000', message: 'SonarQube Analysis failed. View the report at\n\nSonarQube Analysis Report : http://http://3.12.241.46:9000/dashboard?id=maven\n\nGuest Username: guest01\n\nGuest Password: guest01'
                   }
                   else if (qg == 'OK') { 
-                      slackSend color: '#FF0000', message: 'SonarQube Analysis failed. View the report at\n\nSonarQube Analysis Report : http://http://3.12.241.46:9000/dashboard?id=maven\n\nGuest Username: guest01\n\nGuest Password: guest01'
-                       //mail to: "abhilash.rl@cloudjournee.com",
+                      //slackSend color: '#FF0000', message: 'SonarQube Analysis failed. View the report at\n\nSonarQube Analysis Report : http://http://3.12.241.46:9000/dashboard?id=maven\n\nGuest Username: guest01\n\nGuest Password: guest01'
+                       mail to: "abhilash.rl@cloudjournee.com",
                             //cc: "digin@cloudjournee.com",
-                           // subject: "SonarQube Guest Login Credentials",
-                           // body: "Hi Team,\n\n\nPlease find the SonarQube Analysis Report with credentials below\n\n\nSonarQube Analysis Report : http://http://3.12.241.46:9000/dashboard?id=maven\n\nGuest Username: guest01\n\nGuest Password: guest01"
+                            subject: "SonarQube Guest Login Credentials",
+                            body: "Hi Team,\n\n\nPlease find the SonarQube Analysis Report with credentials below\n\n\nSonarQube Analysis Report : http://http://3.12.241.46:9000/dashboard?id=maven\n\nGuest Username: guest01\n\nGuest Password: guest01"
                      }
                   }
               }
