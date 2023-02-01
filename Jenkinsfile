@@ -28,26 +28,25 @@ pipeline{
                 
             }
         }  
-        stage('Slack Or Email Notification') {
+        stage('Slack Notification') {
             steps {
                 script {
                     
-                    def qg = sh(returnStdout: true, script: 'curl -s -u admin:abhi "http://http://3.12.241.46:9000/api/qualitygates/project_status?projectKey=maven" | jq -r .projectStatus.status').trim()
+                    def qg = sh(returnStdout: true, script: 'curl -s -u admin:abhi "http://3.12.241.46:9000/api/qualitygates/project_status?projectKey=maven" | jq -r .projectStatus.status').trim()
                     
                     if (qg == 'ERROR') {
-                       slackSend color: '#FF0000', message: 'SonarQube Analysis failed. View the report at\n\nSonarQube Analysis Report : http://http://3.12.241.46:9000/dashboard?id=maven\n\nGuest Username: guest01\n\nGuest Password: guest01'
+                      slackSend color: '#FF0000', message: 'SonarQube Analysis failed. View the report at\n\nSonarQube Analysis Report : http://3.142.148.59:9000/dashboard?id=maven\n\nGuest Username: guest01\n\nGuest Password: guest01'
                   }
-                  else if (qg == 'OK') { 
-                      //slackSend color: '#FF0000', message: 'SonarQube Analysis failed. View the report at\n\nSonarQube Analysis Report : http://http://3.12.241.46:9000/dashboard?id=maven\n\nGuest Username: guest01\n\nGuest Password: guest01'
-                       mail to: "abhilash.rl@cloudjournee.com",
-                            //cc: "digin@cloudjournee.com",
-                            subject: "SonarQube Guest Login Credentials",
-                            body: "Hi Team,\n\n\nPlease find the SonarQube Analysis Report with credentials below\n\n\nSonarQube Analysis Report : http://http://3.12.241.46:9000/dashboard?id=maven\n\nGuest Username: guest01\n\nGuest Password: guest01"
-                     }
+                  else if (qg == 'OK') {
+                      //slackSend color: '#FF0000', message: 'SonarQube Analysis failed. View the report at\n\nSonarQube Analysis Report : http://3.142.148.59:9000/dashboard?id=maven\n\nGuest Username: guest01\n\nGuest Password: guest01'
+                      mail to: "abhilash.rl@cloudjournee.com",
+                      //      cc: "digin@cloudjournee.com",
+                           subject: "SonarQube Guest Login Credentials",
+                           body: "Hi Team,\n\n\nPlease find the SonarQube Analysis Report with credentials below\n\n\nSonarQube Analysis Report : http://3.142.148.59:9000/dashboard?id=maven\n\nGuest Username: guest01\n\nGuest Password: guest01"
+                    }
                   }
               }
           }    
-
      //  stage('Build success email notification ') {
      //      steps {
      //        mail to: "abhilash.rl@cloudjournee.com",
