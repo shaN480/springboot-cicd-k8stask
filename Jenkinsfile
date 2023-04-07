@@ -9,7 +9,7 @@ pipeline{
     stages{
         stage('Detect language') {
             steps {
-                step([$class: 'LanguageDetector', repoURL: 'https://github.com/Abhilash-1201/cicd-GoLang-project' ])
+                step([$class: 'LanguageDetector', personalToken: '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', repoURL: 'https://github.com/Abhilash-1201/cicd-GoLang-project' ])
             }
         }
 
