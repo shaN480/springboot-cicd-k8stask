@@ -9,9 +9,10 @@ pipeline{
     stages{
         stage('Detect language') {
             steps {
-                step([$class: 'LanguageDetector', personalToken: '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', repoURL: 'https://github.com/Abhilash-1201/cicd-GoLang-project' ])
-            }
-        }
+                step([$class: 'LanguageDetector', repoURL: 'https://github.com/your-username/your-repo.git'])
+                 }
+             }
+
         stage('code checkout from GitHub'){
             steps{
                 //check out code from the GitHub
