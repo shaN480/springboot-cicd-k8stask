@@ -9,7 +9,7 @@ pipeline{
     stages{
         stage('Detect language') {
             steps {
-                step([$class: 'LanguageDetector', personalToken: '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', repoURL: 'https://github.com/Abhilash-1201/springboot-cicd-k8stask' ])
+                step([$class: 'LanguageDetector', personalToken: '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', repoURL: 'https://github.com/Abhilash-1201/springboot-cicd-k8stask' ])
             }
         }
 
