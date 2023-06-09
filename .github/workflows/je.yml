@@ -1,0 +1,47 @@
+- hosts: localhost
+  tasks:
+    - name: Check if Jenkins slave node is available and trigger API
+      jenkins_script:
+        script: |
+          import jenkins.model.Jenkins
+          import hudson.model.Result
+          import java.util.concurrent.TimeUnit
+          import hudson.model.Node
+          import jenkins.model.Jenkins
+          import hudson.slaves.SlaveComputer
+          import groovy.json.JsonSlurper
+          import org.apache.http.client.methods.HttpPost
+          import org.apache.http.impl.client.HttpClients
+          import org.apache.http.util.EntityUtils
+          import jenkins.model.Jenkins
+
+            def jobName = 'pipe'
+            def job = Jenkins.instance.getItemByFullName(jobName)
+            def lastBuild = job.getLastBuild()
+            def lastBuildTime = lastBuild.getTimeInMillis()
+            def currentTime = System.currentTimeMillis()
+            def minutesSinceLastBuild = TimeUnit.MILLISECONDS.toMinutes(currentTime - lastBuildTime)
+
+              if (minutesSinceLastBuild > 60) {
+              // trigger API call
+                print minutesSinceLastBuild
+                 for (Node node : Jenkins.instance.nodes) {
+                  if(node!=null){
+                   a = node.getNodeName().split("\\.internal")[0] + ".internal"
+                   println a
+                   def apiUrl = 'https://eemq19tul2.execute-api.us-east-2.amazonaws.com/Java/instance/terminate?instanceId='+a
+                   println apiUrl
+                   def httpClient = HttpClients.createDefault()
+                   def httpPost = new HttpPost(apiUrl)
+                   def httpResponse = httpClient.execute(httpPost)
+                   def responseContent = EntityUtils.toString(httpResponse.getEntity())
+                   def responseJson = new JsonSlurper().parseText(responseContent)
+                    println responseJson
+                  }
+                        }
+                            }else{
+                 print minutesSinceLastBuild
+                }
+        url: http://3.86.114.186:8080
+        user: Cloudjournee
+        password: Cjptech@12
